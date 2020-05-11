@@ -73,7 +73,7 @@ func main() {
 		queryCmd(cdc),
 		txCmd(cdc),
 		flags.LineBreak,
-		ServeCommand(cdc, registerRoutes),
+		lcd.ServeCommand(cdc, registerRoutes),
 		flags.LineBreak,
 		keys.Commands(),
 		flags.LineBreak,
