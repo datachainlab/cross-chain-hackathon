@@ -10,6 +10,7 @@
 package main
 
 import (
+	"context"
 	"log"
 	"net/http"
 
@@ -68,5 +69,12 @@ func main() {
 	router := api.NewRouter(EstateApiController, TradeApiController, TxApiController, UserApiController)
 	handler := handlers.CORS(handlers.AllowedHeaders([]string{"Content-Type"}),
 		handlers.AllowCredentials())(router)
+
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
+	job := api.NewJob(config)
+	job.Start(ctx)
+
 	log.Fatal(http.ListenAndServe(":8080", handler))
 }

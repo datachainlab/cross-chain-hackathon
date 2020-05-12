@@ -45,6 +45,7 @@ func (s *EstateApiService) GetEstateById(estateId string) (interface{}, error) {
 	trades := []Trade{}
 	rows, err := db.Query("SELECT id, estateId, unitPrice, amount, buyer, seller, type, status, updatedAt FROM trade WHERE estateId = ?", estateId)
 	if err != nil {
+		log.Println(err)
 		return nil, err
 	}
 	for rows.Next() {
@@ -65,15 +66,18 @@ func (s *EstateApiService) GetEstateById(estateId string) (interface{}, error) {
 		reqs := []TradeRequest{}
 		rs, err := db.Query(q, trades[i].Id)
 		if err != nil {
+			log.Println(err)
 			return nil, err
 		}
 		for rs.Next() {
 			tr := TradeRequest{}
 			j := []byte{}
 			if err := rs.Scan(&tr.Id, &tr.TradeId, &tr.From, &j, &tr.Status, &tr.UpdatedAt); err != nil {
+				log.Println(err)
 				return nil, err
 			}
 			if err := json.Unmarshal(j, &tr.CrossTx); err != nil {
+				log.Println(err)
 				return nil, err
 			}
 			reqs = append(reqs, tr)
@@ -102,6 +106,7 @@ func (s *EstateApiService) GetEstates() (interface{}, error) {
 		q := `SELECT id, estateId, unitPrice, amount, buyer, seller, type, status, updatedAt FROM trade WHERE estateId = ?`
 		rows, err := db.Query(q, (*estates)[i].TokenId)
 		if err != nil {
+			log.Println(err)
 			return nil, err
 		}
 		for rows.Next() {
@@ -116,10 +121,8 @@ func (s *EstateApiService) GetEstates() (interface{}, error) {
 			}
 			trades = append(trades, t)
 		}
-		log.Printf("id: %s\ttrades: %+v\n", (*estates)[i].TokenId, trades)
 		(*estates)[i].Trades = trades
 	}
-	log.Printf("estates: %+v\n", estates)
 
 	return estates, nil
 }
