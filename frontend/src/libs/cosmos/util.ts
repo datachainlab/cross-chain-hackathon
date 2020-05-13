@@ -64,6 +64,7 @@ export const Cosmos = {
       ? signedStdTx.signatures
       : [];
 
+    // sigs.unshift(sig);
     sigs.push(sig);
     signedStdTx.signatures = sigs;
 

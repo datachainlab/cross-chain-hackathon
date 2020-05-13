@@ -8,7 +8,7 @@ import {OwnedEstate} from "~models/estate";
 import {BuyOffer, SellOrder} from "~models/order";
 import {User} from "~models/user";
 import {renderEstateDetailInfo} from "~pages/commons/estate/estate-detail-info";
-import {OwnedBuyOfferCancelModal} from "~pages/contents/owned/parts/owned-buy-offer-cancel-modal";
+import {OwnedBuyersBuyOfferCancelModal} from "~pages/contents/owned/parts/owned-buyers-buy-offer-cancel-modal";
 import {renderOwnedDividendTable} from "~pages/contents/owned/parts/owned-dividend-table";
 import {OwnedSellBuyOfferModal} from "~pages/contents/owned/parts/owned-sell-buy-offer-modal";
 import {OwnedSellOrderCancelModal} from "~pages/contents/owned/parts/owned-sell-order-cancel-modal";
@@ -218,7 +218,7 @@ export class OwnedDetail extends React.Component<Props, State> {
         this.setState({estate: newEstate});
       } catch (e) {
         log.error(e);
-        message.error("API Request Failed");
+        message.error(e.toString());
       } finally {
         resetState();
       }
@@ -322,8 +322,8 @@ export class OwnedDetail extends React.Component<Props, State> {
 
   renderCancelBuyersBuyOfferModal = () => {
     const {
-      user: {address},
-      repos: {estateRepo, orderRepo}
+      repos: {orderRepo},
+      history
     } = this.props;
 
     const {
@@ -345,7 +345,7 @@ export class OwnedDetail extends React.Component<Props, State> {
       });
 
     return (
-      <OwnedBuyOfferCancelModal
+      <OwnedBuyersBuyOfferCancelModal
         estate={estate}
         order={canceledBuyersBuyOffer}
         visible={cancelBuyersBuyOfferModalVisible}
@@ -359,17 +359,10 @@ export class OwnedDetail extends React.Component<Props, State> {
                   canceledBuyersBuyOffer
                 );
                 log.debug(response);
-
-                const newEstate = await estateRepo.getOwnedEstate(
-                  estate.tokenId,
-                  address
-                );
-                this.setState({estate: newEstate});
+                history.push(PATHS.OWNED);
               } catch (e) {
                 log.error(e);
                 message.error("API Request Failed");
-              } finally {
-                resetState();
               }
             }
           );

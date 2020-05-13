@@ -1,7 +1,7 @@
 import fetch from "cross-fetch";
 import {stringify} from "query-string";
 
-import {TxResponseDataEvent} from "~src/libs/cosmos/rpc-client";
+import {StdTx} from "~src/libs/api";
 
 type ContractIdType = "dcc" | "estate";
 
@@ -19,7 +19,7 @@ const initGet = (): RequestInit => {
 };
 
 type RestPostMethods = "txs" | "cross/contract/call";
-type RestPostParamTypes = string | CrossContractCallParams;
+type RestPostParamTypes = BroadcastTxParams | CrossContractCallParams;
 
 type RestResponseTypes =
   | GetTxsResponse
@@ -85,7 +85,7 @@ export class RestClient {
   };
 
   txs = this.get<GetTxsResponse, GetTxsParams>("txs");
-  txsPost = this.post<BroadcastTxCommitResponse, string>("txs");
+  txsPost = this.post<BroadcastTxCommitResponse, BroadcastTxParams>("txs");
 
   crossCoordinatorStatus = this.get<
     CrossCoordinatorStatusResponse,
@@ -115,35 +115,19 @@ interface GetTxsResponse {
   txs: boolean[];
 }
 
+interface BroadcastTxParams {
+  tx: StdTx;
+  mode: "block" | "sync" | "async";
+}
+
 interface BroadcastTxCommitResponse {
   height: string;
-  hash: string;
-  check_tx: BroadcastTxResponseCheckTx;
-  deliver_tx: BroadcastTxResponseDeliverTx;
-  error?: string;
-}
-
-type BroadcastTxResponseCheckTx =
-  | BroadcastTxResponseCheckTxSuccess
-  | BroadcastTxResponseCheckTxFailed;
-
-interface BroadcastTxResponseCheckTxSuccess {
-  data: Base64EncodedString;
-  events: TxResponseDataEvent[];
-  gasUsed: string;
-}
-
-interface BroadcastTxResponseCheckTxFailed {
-  code: number;
-  events: TxResponseDataEvent[];
-  gasUsed: string;
-  log: string;
-}
-
-interface BroadcastTxResponseDeliverTx {
-  data?: Base64EncodedString;
-  events?: TxResponseDataEvent[];
-  gasUsed?: string;
+  txhash: string;
+  code?: number;
+  codespace?: string;
+  gas_wanted?: string;
+  gas_used?: DecimalString;
+  row_log?: string;
 }
 
 export interface CrossContractCallParams {

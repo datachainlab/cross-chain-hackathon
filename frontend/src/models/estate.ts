@@ -166,13 +166,9 @@ export class OwnedEstate extends Estate {
     return !!this.findActiveSellOrder();
   };
 
-  findActiveOwnedBuyOffer = (offerer: Address): BuyOffer[] => {
+  findOwnedBuyOffer = (offerer: Address): BuyOffer[] => {
     const activeSellOrderBuyOffers = SellOrder.sortDateDesc(this.sellOrders)
-      .filter(
-        order =>
-          order.status === ORDER_STATUS.OPENED &&
-          order.buyOffers.find(offer => offer.offerer === offerer)
-      )
+      .filter(order => order.buyOffers.find(offer => offer.offerer === offerer))
       .map(order => order.buyOffers);
 
     const ret: BuyOffer[] = [];
@@ -241,7 +237,11 @@ export class MarketEstate extends Estate {
       order =>
         order.status === ORDER_STATUS.OPENED &&
         order.owner !== user.address &&
-        !order.buyOffers.find(offer => offer.offerer === user.address)
+        !order.buyOffers.find(
+          offer =>
+            offer.offerer === user.address &&
+            offer.status === OFFER_STATUS.OPENED
+        )
     );
   }
 }
