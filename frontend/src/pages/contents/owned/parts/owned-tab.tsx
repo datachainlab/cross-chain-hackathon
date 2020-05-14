@@ -37,27 +37,29 @@ export class EstateOrderTab extends React.Component<Props> {
 
     return (
       <React.Fragment>
-        {estate.status === ESTATE_STATUS.OWNED && (
-          <OwnedSellOrderForm
-            estate={estate}
-            onFinish={handleSellOrderFormSubmit}
-          />
-        )}
-        {estate.status === ESTATE_STATUS.SELLING &&
-          activeSellOrder &&
-          activeSellOrder.owner === user.address &&
-          renderOwnedSellOrderInfo(
-            activeSellOrder,
-            handleChancelSellOrder(activeSellOrder)
+        {estate.status === ESTATE_STATUS.OWNED &&
+          estate.units > 0 &&
+          !activeSellOrder && (
+            <OwnedSellOrderForm
+              estate={estate}
+              onFinish={handleSellOrderFormSubmit}
+            />
           )}
         {estate.status === ESTATE_STATUS.SELLING &&
           activeSellOrder &&
-          activeSellOrder.owner === user.address &&
-          renderOwnedSellersBuyOfferTable(
-            activeSellOrder?.buyOffers
-              ? BuyOffer.sortDateDesc(activeSellOrder.buyOffers)
-              : [],
-            handleSellersBuyOfferClick
+          activeSellOrder.isOwner(user.address) && (
+            <React.Fragment>
+              {renderOwnedSellOrderInfo(
+                activeSellOrder,
+                handleChancelSellOrder(activeSellOrder)
+              )}
+              {renderOwnedSellersBuyOfferTable(
+                activeSellOrder?.buyOffers
+                  ? BuyOffer.sortDateDesc(activeSellOrder.buyOffers)
+                  : [],
+                handleSellersBuyOfferClick
+              )}
+            </React.Fragment>
           )}
       </React.Fragment>
     );

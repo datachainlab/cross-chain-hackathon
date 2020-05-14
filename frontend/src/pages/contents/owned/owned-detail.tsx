@@ -204,8 +204,8 @@ export class OwnedDetail extends React.Component<Props, State> {
         const crossTx = selectedBuyOffer.crossTx;
         log.debug(crossTx);
 
-        const ecPairPriv = Cosmos.getECPairPriv(mnemonic);
-        const signedTx: StdTx = Cosmos.signCrossTx(crossTx.value, ecPairPriv);
+        const privateKey = Cosmos.getPrivateKey(mnemonic);
+        const signedTx: StdTx = Cosmos.signCrossTx(crossTx.value, privateKey);
         log.debug(signedTx);
 
         const response = await orderRepo.broadcastTx(signedTx);

@@ -1,7 +1,7 @@
+import {encodeByteSlice} from "@tendermint/amino-js";
 import bech32 from "bech32";
 import * as bip32 from "bip32";
 import * as bip39 from "bip39";
-import * as bitcoinjs from "bitcoinjs-lib";
 import * as crypto from "crypto";
 import * as secp256k1 from "secp256k1";
 
@@ -19,26 +19,34 @@ export const Cosmos = {
     return bech32.encode(bech32MainPrefix, words);
   },
 
-  getECPairPriv: (mnemonic: string): Buffer => {
+  getPrivateKey: (mnemonic: string): Buffer => {
     const seed = bip39.mnemonicToSeedSync(mnemonic);
     const node = bip32.fromSeed(seed);
     const child = node.derivePath(path);
     if (!child.privateKey) {
       throw new Error("could not derive private key");
     }
-    const ecPair = bitcoinjs.ECPair.fromPrivateKey(child.privateKey, {
-      compressed: false
-    });
-
-    if (!ecPair.privateKey) {
-      throw new Error("could not create ec pair");
-    }
-    return ecPair.privateKey;
+    // const ecPair = bitcoinjs.ECPair.fromPrivateKey(child.privateKey, {
+    //   compressed: false
+    // });
+    //
+    // if (!ecPair.privateKey) {
+    //   throw new Error("could not create ec pair");
+    // }
+    return child.privateKey;
   },
 
-  getPubKeyBase64: (ecPairPriv: Buffer): string => {
-    const pubKeyByte = secp256k1.publicKeyCreate(ecPairPriv);
-    return Buffer.from(pubKeyByte).toString("base64");
+  getPubKeyBase64: (privateKey: Buffer): string => {
+    const pubKeyByte: Buffer = secp256k1.publicKeyCreate(privateKey, true);
+    const pubBuf = Buffer.from(encodeByteSlice(pubKeyByte));
+    const registeredPrefix: Uint8Array = Buffer.from(
+      Uint8Array.of(235, 90, 233, 135)
+    );
+    const prefixedBuf = Buffer.from([
+      ...registeredPrefix.slice(),
+      ...pubBuf.slice()
+    ]);
+    return prefixedBuf.toString("base64");
   },
 
   signCrossTx: (stdTx: StdTx, ecPairPriv: Buffer) => {
@@ -48,7 +56,7 @@ export const Cosmos = {
 
     const hash = crypto
       .createHash("sha256")
-      .update(JSON.stringify(signedStdTx))
+      .update(JSON.stringify(sortObject(signedStdTx)))
       .digest("hex");
 
     const buf = Buffer.from(hash, "hex");
@@ -64,10 +72,18 @@ export const Cosmos = {
       ? signedStdTx.signatures
       : [];
 
-    // sigs.unshift(sig);
-    sigs.push(sig);
+    sigs.unshift(sig);
     signedStdTx.signatures = sigs;
 
     return signedStdTx;
   }
 } as const;
+
+const sortObject = (msg: StdTx): StdTx => {
+  return {
+    fee: msg.fee,
+    memo: msg.memo,
+    msg: msg.msg,
+    signatures: msg.signatures
+  };
+};

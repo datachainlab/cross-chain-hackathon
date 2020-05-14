@@ -114,7 +114,7 @@ export class OrderRepository extends BaseRepo {
       tx: stdTx,
       mode
     });
-    if (response.code || response.codespace || response.row_log) {
+    if (response.error || response.code || response.codespace) {
       throw new Error(JSON.stringify(response));
     }
     return response;

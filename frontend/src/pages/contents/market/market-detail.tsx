@@ -131,8 +131,8 @@ export class MarketDetail extends React.Component<Props, State> {
                 log.debug(crossTx);
                 const nonce = DateTime.utc().toMillis();
                 crossTx.value.msg[0].value.Nonce = nonce.toString(10);
-                const ecPairPriv = Cosmos.getECPairPriv(mnemonic);
-                const signedTx = Cosmos.signCrossTx(crossTx.value, ecPairPriv);
+                const privateKey = Cosmos.getPrivateKey(mnemonic);
+                const signedTx = Cosmos.signCrossTx(crossTx.value, privateKey);
 
                 const response = await orderRepo.postBuyOffer(
                   selectedSellOrder,

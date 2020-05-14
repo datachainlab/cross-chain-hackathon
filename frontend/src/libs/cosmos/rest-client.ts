@@ -128,6 +128,7 @@ interface BroadcastTxCommitResponse {
   gas_wanted?: string;
   gas_used?: DecimalString;
   row_log?: string;
+  error?: string;
 }
 
 export interface CrossContractCallParams {

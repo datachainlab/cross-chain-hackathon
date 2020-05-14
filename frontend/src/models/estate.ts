@@ -168,7 +168,11 @@ export class OwnedEstate extends Estate {
 
   findOwnedBuyOffer = (offerer: Address): BuyOffer[] => {
     const activeSellOrderBuyOffers = SellOrder.sortDateDesc(this.sellOrders)
-      .filter(order => order.buyOffers.find(offer => offer.offerer === offerer))
+      .filter(
+        order =>
+          order.status === ORDER_STATUS.OPENED &&
+          order.buyOffers.find(offer => offer.offerer === offerer)
+      )
       .map(order => order.buyOffers);
 
     const ret: BuyOffer[] = [];
