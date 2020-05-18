@@ -5,6 +5,9 @@ Real Estate Exchange
 This is a real estate trade application build on Cosmos SDK. Users have some coin tokens, and they can sell and buy real estate as securities. Each issuer pays dividends as another blockchain's token to the security owners.
 The trade is empowered by our Cross framework, which supports a cross-chain atomic swap between blockchains connected via IBC.
 
+
+Our Demo is the following:
+
 [![](http://img.youtube.com/vi/9teHoCH492c/0.jpg)](http://www.youtube.com/watch?v=9teHoCH492c "Demonstration movie")
 
 Real Estate Exchange Website: http://datachain-cch-hosting.s3.amazonaws.com/index.html
