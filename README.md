@@ -6,7 +6,7 @@ This is a real estate trade application build on Cosmos SDK. Users have some coi
 The trade is empowered by our Cross framework, which supports a cross-chain atomic swap between blockchains connected via IBC.
 
 
-Our Demo is the following:
+Our Demo Movie is the following:
 
 [![](http://img.youtube.com/vi/9teHoCH492c/0.jpg)](http://www.youtube.com/watch?v=9teHoCH492c "Demonstration movie")
 
