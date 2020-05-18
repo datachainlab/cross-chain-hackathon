@@ -1,3 +1,9 @@
+Real Estate Exchange
+---
+
+This is a real estate trade application build on Cosmos SDK. Users have some coin tokens, and they can sell and buy real estate as securities. Each issuer pays dividends as another blockchain's token to the security owners.
+The trade is empowered by our Cross framework, which supports a cross-chain atomic swap between blockchains connected via IBC.
+
 ## Motivation
 
 The tokenization of real estate securities is the latest trend. By representing securities as tokens on the blockchain, we are trying to build a new funding platform that can reduce administrative costs, such as rewriting legal books. In the future, we improve liquidity efficiency by automating the transfer, dividend, and redemption processes using digital currencies such as CBDC.
