@@ -124,13 +124,22 @@ const Config: Configuration = {
     publicPath: PATH.dist
   },
   optimization: {
+    usedExports: true,
     splitChunks: {
       cacheGroups: {
         vendor: {
           test: /node_modules/,
           name: "vendor",
           chunks: "initial",
-          enforce: true
+          enforce: true,
+          priority: -1
+        },
+        amino: {
+          test: /(Amino|amino)/,
+          name: "amino",
+          chunks: "initial",
+          enforce: true,
+          priority: 1
         }
       }
     }

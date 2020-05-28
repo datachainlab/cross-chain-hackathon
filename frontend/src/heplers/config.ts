@@ -2,11 +2,8 @@ type Env = "development" | "production";
 
 export interface Config {
   apiEndPoint: string;
-  coordinatorRPCEndPoint: string;
   coordinatorRESTEndPoint: string;
-  securityRPCEndPoint: string;
   securityRESTEndPoint: string;
-  coinRPCEndPoint: string;
   coinRESTEndPoint: string;
   env: Env;
 }
@@ -28,11 +25,6 @@ export const createConfig = (): Config => {
   // API server Endpoints
   const apiEndPoint = `${baseURL}:8080/api`;
 
-  // RPC Endpoints
-  const coordinatorRPCEndPoint = `${baseURL}:26657`;
-  const securityRPCEndPoint = `${baseURL}:26660`;
-  const coinRPCEndPoint = `${baseURL}:26662`;
-
   // REST Endpoints
   const coordinatorRESTEndPoint = `${baseURL}:1317`;
   const securityRESTEndPoint = `${baseURL}:1318`;
@@ -41,11 +33,8 @@ export const createConfig = (): Config => {
   return {
     env,
     apiEndPoint,
-    coordinatorRPCEndPoint,
     coordinatorRESTEndPoint,
-    securityRPCEndPoint,
     securityRESTEndPoint,
-    coinRPCEndPoint,
     coinRESTEndPoint
   };
 };

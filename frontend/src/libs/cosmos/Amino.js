@@ -2354,14 +2354,19 @@ $packages["runtime"] = (function() {
 		$unused(e);
 	};
 	GOROOT = function() {
-		var goroot, process;
+		var process, v, v$1;
 		process = $global.process;
 		if (process === undefined) {
 			return "/";
 		}
-		goroot = process.env.GOROOT;
-		if (!(goroot === undefined)) {
-			return $internalize(goroot, $String);
+		v = process.env.GOPHERJS_GOROOT;
+		if (!(v === undefined)) {
+			return $internalize(v, $String);
+		} else {
+			v$1 = process.env.GOROOT;
+			if (!(v$1 === undefined)) {
+				return $internalize(v$1, $String);
+			}
 		}
 		return "/usr/local/go";
 	};
@@ -44614,7 +44619,7 @@ $packages["github.com/datachainlab/cross-chain-hackathon/frontend/gopherjs/lib"]
 	$pkg.$init = $init;
 	return $pkg;
 })();
-$packages["github.com/datachainlab/cross-chain-hackathon/frontend/gopherjs"] = (function() {
+$packages["."] = (function() {
 	var $pkg = {}, $init, fmt, lib, js, sliceType, sliceType$1, funcType, main;
 	fmt = $packages["fmt"];
 	lib = $packages["github.com/datachainlab/cross-chain-hackathon/frontend/gopherjs/lib"];
@@ -44651,7 +44656,7 @@ $packages["github.com/datachainlab/cross-chain-hackathon/frontend/gopherjs"] = (
 	return $pkg;
 })();
 $synthesizeMethods();
-var $mainPkg = $packages["github.com/datachainlab/cross-chain-hackathon/frontend/gopherjs"];
+var $mainPkg = $packages["."];
 $packages["runtime"].$init();
 $go($mainPkg.$init, []);
 $flushConsole();
