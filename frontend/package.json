@@ -33,7 +33,7 @@
   "dependencies": {
     "@tendermint/amino-js": "^0.6.2",
     "antd": "^4.2.0",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "bech32": "^1.1.4",
     "bip32": "^2.0.5",
     "bip39": "^3.0.2",
