@@ -40,7 +40,7 @@
     "bn.js": "^5.1.1",
     "buffer": "^5.4.3",
     "cross-fetch": "^3.0.4",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.21",
     "loglevel": "^1.6.8",
     "luxon": "^1.23.0",
     "query-string": "^6.12.1",
